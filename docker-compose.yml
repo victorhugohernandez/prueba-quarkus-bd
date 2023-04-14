@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  postgresql14:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'informatica'
+      POSTGRES_DB: 'postgres'
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    ports:
+      - "5432"
+  mongo:
+    image: 'mongo:4.4-rc-focal'
+    ports:
+      - '27017:27017'
+    #environment:
+      #- MONGO_INITDB_ROOT_USERNAME=testuser
+      #- MONGO_INITDB_ROOT_PASSWORD=password
+  quarkus:
+    image: victor.hernandez/prueba-quarkus-bd:latest
+    environment:
+      JAVA_OPTS: '-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager -Dquarkus-profile=docker'
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: informatica
+      POSTGRES_URL: "jdbc:postgresql://postgresql14:5432/postgres"
+      MONGO_URL: mongodb://mongo:27017
+      MONGO_USER: 45c571a156ddcef41351a713bcddee5ba7e95460
+      MONGO_PASSWORD: 5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql14
+      - mongo
+volumes:
+  database-data:

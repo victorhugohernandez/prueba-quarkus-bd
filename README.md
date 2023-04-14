@@ -47,6 +47,21 @@ You can then execute your native executable with: `./target/test-db-1.0.0-SNAPSH
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
 
+## Contenerizar la App, Mongo y Postgresql
+
+1. Compilar y empaquetar
+```shell script
+mvn clean package -DskipTests
+```
+2. Generar la imagen de la App
+```shell script
+docker build -f src/main/docker/Dockerfile.jvm -t victor.hernandez/prueba-quarkus-bd .
+```
+3. Generar el Docker Compose
+```shell script
+docker-compose -p prueba-quarkus-bd-compose up -d
+```
+
 ## Related Guides
 
 - SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Document your REST APIs with OpenAPI - comes with Swagger UI
